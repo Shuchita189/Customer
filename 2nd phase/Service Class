@@ -1,0 +1,30 @@
+package com.example.project.service;
+
+import com.example.project.model.Customer;
+import com.example.project.repository.CustomerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class CustomerService {
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    public List<Customer> getAllCustomers() {
+        return customerRepository.findAll();
+    }
+
+    public void saveCustomer(Customer customer) {
+        Customer existingCustomer = customerRepository.findByUuid(customer.getUuid());
+        if (existingCustomer != null) {
+            existingCustomer.setFirstName(customer.getFirstName());
+            existingCustomer.setLastName(customer.getLastName());
+            // Update other fields
+            customerRepository.save(existingCustomer);
+        } else {
+            customerRepository.save(customer);
+        }
+    }
+}
