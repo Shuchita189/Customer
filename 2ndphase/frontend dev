@@ -1,0 +1,74 @@
+//HTML Template (index.html)
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <script src="js/scripts.js" defer></script>
+</head>
+<body>
+    <div>
+        <button id="syncButton">Sync</button>
+        <table id="customerTable">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Street</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</body>
+</html>
+
+
+//JavaScript (scripts.js)
+document.getElementById("syncButton").addEventListener("click", function() {
+    fetch("/sync", { method: "POST" })
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.getElementById("customerTable").getElementsByTagName("tbody")[0];
+            tbody.innerHTML = "";
+            data.forEach(customer => {
+                const row = tbody.insertRow();
+                row.insertCell(0).innerText = customer.firstName;
+                row.insertCell(1).innerText = customer.lastName;
+                row.insertCell(2).innerText = customer.street;
+                row.insertCell(3).innerText = customer.address;
+                row.insertCell(4).innerText = customer.city;
+                row.insertCell(5).innerText = customer.state;
+                row.insertCell(6).innerText = customer.email;
+                row.insertCell(7).innerText = customer.phone;
+            });
+        });
+});
+
+//CSS (styles.css)
+body {
+    font-family: Arial, sans-serif;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+#syncButton {
+    margin-bottom: 10px;
+}
+
