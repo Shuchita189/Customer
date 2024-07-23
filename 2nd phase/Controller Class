@@ -1,0 +1,48 @@
+package com.example.project.controller;
+
+import com.example.project.model.Customer;
+import com.example.project.service.CustomerService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.Arrays;
+
+@RestController
+public class CustomerController {
+    @Autowired
+    private CustomerService customerService;
+
+    @GetMapping("/customers")
+    public List<Customer> getAllCustomers() {
+        return customerService.getAllCustomers();
+    }
+
+    @PostMapping("/sync")
+    public void syncCustomers() {
+        RestTemplate restTemplate = new RestTemplate();
+        String authToken = authenticate();
+        String url = "https://qa.sunbasedata.com/sunbase/portal/api/assignment.jsp?cmd=get_customer_list";
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + authToken);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<Customer[]> response = restTemplate.exchange(url, HttpMethod.GET, entity, Customer[].class);
+        Customer[] customers = response.getBody();
+        Arrays.stream(customers).forEach(customerService::saveCustomer);
+    }
+
+    private String authenticate() {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "https://qa.sunbasedata.com/sunbase/portal/api/assignment_auth.jsp";
+        Map<String, String> credentials = new HashMap<>();
+        credentials.put("login_id", "test@sunbasedata.com");
+        credentials.put("password", "Test@123");
+        ResponseEntity<String> response = restTemplate.postForEntity(url, credentials, String.class);
+        // Extract token from response
+        return response.getBody();
+    }
+}
