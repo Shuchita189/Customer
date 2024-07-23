@@ -1,0 +1,9 @@
+Run the Spring Boot application:
+
+Use your IDE or run mvn spring-boot:run from the command line.
+Access the H2 Database Console:
+
+Navigate to http://localhost:8080/h2-console to view the database.
+Access the Frontend:
+
+Open http://localhost:8080 in your web browser.
