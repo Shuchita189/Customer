@@ -1,0 +1,76 @@
+//Login Screen
+<div>
+    <h2>Login Page</h2>
+    <form id="loginForm">
+        <input type="text" id="loginId" placeholder="login id" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+//Customer List Screen
+<div>
+    <h2>Customer List</h2>
+    <button onclick="showAddCustomerForm()">Add Customer</button>
+    <input type="text" id="search" placeholder="Search">
+    <table id="customerTable">
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Customer rows will be dynamically inserted here -->
+        </tbody>
+    </table>
+</div>
+
+
+//Add Customer Screen
+<div id="addCustomerForm" style="display:none;">
+    <h2>Customer Details</h2>
+    <form id="customerForm">
+        <input type="text" placeholder="First name" required>
+        <input type="text" placeholder="Last name" required>
+        <input type="text" placeholder="Street" required>
+        <input type="text" placeholder="Address" required>
+        <input type="text" placeholder="City" required>
+        <input type="text" placeholder="State" required>
+        <input type="email" placeholder="Email" required>
+        <input type="tel" placeholder="Phone" required>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+
+//JavaScript for API Calls
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    // Perform login and JWT token handling
+});
+
+function fetchCustomers() {
+    fetch('/customers')
+        .then(response => response.json())
+        .then(data => {
+            // Populate the customer table
+        });
+}
+
+document.getElementById('customerForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    // Add a new customer
+});
+
+function showAddCustomerForm() {
+    document.getElementById('addCustomerForm').style.display = 'block';
+}
+
+//
